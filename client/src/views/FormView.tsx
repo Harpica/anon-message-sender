@@ -25,14 +25,7 @@ const FormView = () => {
                         />
                     )}
                 />
-                {/* <button
-                    type={'submit'}
-                    className=' p-2 pr-8 pl-8 self-stretch bg-gradient-to-r from-sky-500 to-indigo-500
-                                 text-white shadow-md rounded outline-none hover:opacity-80 transition-all active:scale-90 uppercase'
-                >
-                    Send message
-                </button> */}
-                <div className='rounded bg-gradient-to-r from-sky-500 to-indigo-500 p-1 hover:opacity-80 transition-all active:scale-90 self-start sm:self-center'>
+                <div className='rounded bg-gradient-to-r from-sky-500 to-indigo-500 p-1 hover:opacity-80 transition-all active:scale-90 self-center'>
                     <button
                         type={'submit'}
                         className=' box-border p-1 pr-8 pl-8 self-center bg-white text-indigo-500

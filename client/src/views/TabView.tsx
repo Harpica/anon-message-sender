@@ -20,7 +20,7 @@ const TabView = () => {
                     className='flex justify-between'
                     primary={
                         <div>
-                            <h3 className='text-indigo-600'>Title</h3>
+                            <h3 className='text-indigo-600 font-bold'>Title</h3>
                             <p>From: Name</p>
                         </div>
                     }
