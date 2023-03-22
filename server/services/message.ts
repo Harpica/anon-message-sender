@@ -1,3 +1,4 @@
+import { Message } from '@prisma/client';
 import { IncomingMessage, ServerResponse, Server } from 'http';
 import { WebSocket, WebSocketServer } from 'ws';
 import { createMessage } from '../controllers/message';
@@ -61,7 +62,7 @@ export class Messenger {
         });
 
         createMessage(data)
-            .then((message) => {
+            .then((message: Message) => {
                 const outbound = JSON.stringify(message);
                 if (recipient) {
                     recipient.send(outbound);
@@ -70,7 +71,7 @@ export class Messenger {
                     sender.send(outbound);
                 }
             })
-            .catch((err) => {
+            .catch((err: Error) => {
                 console.log(err);
                 sender.send(JSON.stringify({ error: err.message }));
             });

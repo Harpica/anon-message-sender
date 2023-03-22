@@ -17,7 +17,7 @@ export const getSentMessages = (
         .then((data) => {
             res.send({ messages: data });
         })
-        .catch((err) => console.log(err));
+        .catch((err: Error) => console.log(err));
 };
 
 export const getReceivedMessages = (
@@ -35,7 +35,7 @@ export const getReceivedMessages = (
         .then((data) => {
             res.send({ messages: data });
         })
-        .catch((err) => console.log(err));
+        .catch((err: Error) => console.log(err));
 };
 
 export const createMessage = ({
