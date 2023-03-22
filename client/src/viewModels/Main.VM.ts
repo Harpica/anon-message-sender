@@ -9,6 +9,7 @@ export class MainVM {
     public messages: Messages = { sent: [], received: [] };
     public isNotificationOpen: boolean;
     public notificationMessage: string;
+    public tabsValue: number = 0;
     private currentUser: UserData;
     private setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
     private api: Api;
@@ -123,6 +124,17 @@ export class MainVM {
     }
     private set setNotificationMessage(value: string) {
         this.notificationMessage = value;
+    }
+
+    set setTabsValue(value: number) {
+        this.tabsValue = value;
+    }
+
+    a11yProps(index: number) {
+        return {
+            id: `full-width-tab-${index}`,
+            'aria-controls': `full-width-tabpanel-${index}`,
+        };
     }
 
     logOut() {

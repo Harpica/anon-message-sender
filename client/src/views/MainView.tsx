@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { MainVM } from '../viewModels/Main.VM';
 import FormView from './FormView';
@@ -12,13 +12,6 @@ import { api } from '../utils/API';
 import { UserData } from '../utils/types';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
-function a11yProps(index: number) {
-    return {
-        id: `full-width-tab-${index}`,
-        'aria-controls': `full-width-tabpanel-${index}`,
-    };
-}
-
 interface MainViewProps {
     currentUser: UserData;
     setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,14 +20,6 @@ interface MainViewProps {
 const MainView: React.FC<MainViewProps> = observer(
     ({ currentUser, setIsAuth }) => {
         const theme = useTheme();
-        const [value, setValue] = useState(0);
-
-        const handleChange = (
-            event: React.SyntheticEvent,
-            newValue: number
-        ) => {
-            setValue(newValue);
-        };
 
         const vm = useMemo(() => new MainVM(currentUser, setIsAuth, api), []);
 
@@ -57,16 +42,18 @@ const MainView: React.FC<MainViewProps> = observer(
                     <main className={'h-full box-border text-slate-900'}>
                         <nav className='bg-gradient-to-r from-sky-500 to-indigo-500 shadow text-white flex flex-col-reverse sm:flex-row items-center justify-between  mr-[-50%] pr-[50%] ml-[-50%] pl-[50%]'>
                             <Tabs
-                                value={value}
-                                onChange={handleChange}
+                                value={vm.tabsValue}
+                                onChange={(e, newValue) => {
+                                    vm.setTabsValue = newValue;
+                                }}
                                 indicatorColor='secondary'
                                 textColor='inherit'
                                 variant='standard'
                                 aria-label='full width tabs example'
                             >
-                                <Tab label='New Message' {...a11yProps(0)} />
-                                <Tab label='Inbox' {...a11yProps(1)} />
-                                <Tab label='Outbox' {...a11yProps(2)} />
+                                <Tab label='New Message' {...vm.a11yProps(0)} />
+                                <Tab label='Inbox' {...vm.a11yProps(1)} />
+                                <Tab label='Outbox' {...vm.a11yProps(2)} />
                             </Tabs>
                             <div className='flex flex-row p-2 pr-4 pl-4 items-center'>
                                 <p className='capitalize'>{`Welcome, ${currentUser.name}!`}</p>
@@ -82,21 +69,33 @@ const MainView: React.FC<MainViewProps> = observer(
                                 </a>
                             </div>
                         </nav>
-                        <TabPanel value={value} index={0} dir={theme.direction}>
+                        <TabPanel
+                            value={vm.tabsValue}
+                            index={0}
+                            dir={theme.direction}
+                        >
                             <FormView
                                 sendMessage={vm.sendMessage}
                                 currentUser={currentUser}
                                 users={vm.users}
                             />
                         </TabPanel>
-                        <TabPanel value={value} index={1} dir={theme.direction}>
+                        <TabPanel
+                            value={vm.tabsValue}
+                            index={1}
+                            dir={theme.direction}
+                        >
                             <TabView
                                 type='inbox'
                                 key='inbox'
                                 messages={vm.messages.received}
                             />
                         </TabPanel>
-                        <TabPanel value={value} index={2} dir={theme.direction}>
+                        <TabPanel
+                            value={vm.tabsValue}
+                            index={2}
+                            dir={theme.direction}
+                        >
                             <TabView
                                 type='outbox'
                                 key='outbox'
