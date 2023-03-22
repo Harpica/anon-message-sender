@@ -18,10 +18,14 @@ model User {
 }
 
 model Message {
-  id          Int    @id @default(autoincrement())
-  title       String
-  sender      User   @relation("sent", fields: [senderID], references: [id])
-  senderID    Int
-  recipient   User   @relation("received", fields: [recipientID], references: [id])
-  recipientID Int
+  id            Int       @id @default(autoincrement())
+  date          DateTime?
+  title         String
+  body          String
+  sender        User      @relation("sent", fields: [senderID], references: [id])
+  senderID      Int
+  senderName    String?
+  recipient     User      @relation("received", fields: [recipientID], references: [id])
+  recipientID   Int
+  recipientName String?
 }
