@@ -20,12 +20,42 @@ services:
       - '${DATABASE_PORT}'
     volumes:
       - my-db:/var/lib/mysql
-    # networks:
-    #   - backend
+    networks:
+      - backend
+
+  node:
+    container_name: anon-message-sender-node
+    depends_on:
+      - db
+    build: ./server
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - $PORT:$PORT
+    expose:
+      - $PORT
+    environment:
+      - DATABASE_URL=$DATABASE_URL
+      - PORT=$PORT
+    networks:
+      - backend
+      - frontend
+
+  react:
+    container_name: anon-message-sender-react
+    depends_on:
+      - node
+    build:
+      context: ./client
+    ports:
+      - 3002:80
+    networks:
+      - frontend
 
 volumes:
   my-db:
 
-    # networks:
-    #   backend:
-    #   frontend:
+
+networks:
+  backend:
+  frontend:
