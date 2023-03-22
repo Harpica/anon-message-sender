@@ -5,57 +5,82 @@ import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import { observer } from 'mobx-react-lite';
+import { Message } from '../utils/types';
 
-const TabView = () => {
-    const [open, setOpen] = useState(true);
+interface TabViewProps {
+    type: 'inbox' | 'outbox';
+    messages: Array<Message>;
+}
 
-    const handleClick = () => {
-        setOpen(!open);
+const TabView: React.FC<TabViewProps> = observer(({ type, messages }) => {
+    const [opened, setOpened] = useState<Array<number>>([]);
+
+    const handleClick = (id: number) => {
+        if (opened.includes(id)) {
+            setOpened(opened.filter((i) => i !== id));
+            return;
+        }
+        setOpened([...opened, id]);
     };
 
     return (
-        <List sx={{ width: '100%' }} component='ul'>
-            <ListItemButton onClick={handleClick}>
-                <ListItemText
-                    className='flex justify-between'
-                    primary={
-                        <div>
-                            <h3 className='text-indigo-600 font-bold'>Title</h3>
-                            <p>From: Name</p>
+        <>
+            {messages.length === 0 && <p>No messages</p>}
+            <List sx={{ width: '100%' }} component='div'>
+                {messages
+                    .slice()
+                    .sort((a, b) => {
+                        return b.id - a.id;
+                    })
+                    .map((message, i) => (
+                        <div key={type + i}>
+                            <ListItemButton onClick={() => handleClick(i)}>
+                                <ListItemText
+                                    className='flex justify-between'
+                                    primary={
+                                        <div>
+                                            <h3 className='text-indigo-600 font-bold'>
+                                                {message.title}
+                                            </h3>
+                                            <p>
+                                                {type === 'inbox' &&
+                                                    `From: ${message.senderName}`}
+                                            </p>
+                                            <p>
+                                                {type === 'outbox' &&
+                                                    `To: ${message.recipientName}`}
+                                            </p>
+                                            {message.date && (
+                                                <p>{`Date: ${new Date(
+                                                    message.date
+                                                ).toLocaleString()}`}</p>
+                                            )}
+                                        </div>
+                                    }
+                                />
+                                {opened.includes(i) ? (
+                                    <ExpandLess />
+                                ) : (
+                                    <ExpandMore />
+                                )}
+                            </ListItemButton>
+                            <Collapse
+                                in={opened.includes(i)}
+                                timeout='auto'
+                                unmountOnExit
+                            >
+                                <List component='div' disablePadding>
+                                    <ListItemText sx={{ pl: 4 }}>
+                                        {message.body}
+                                    </ListItemText>
+                                </List>
+                            </Collapse>
                         </div>
-                    }
-                />
-                {open ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
-            <Collapse in={open} timeout='auto' unmountOnExit>
-                <List component='div' disablePadding>
-                    <ListItemText sx={{ pl: 4 }}>
-                        Body of the message
-                    </ListItemText>
-                </List>
-            </Collapse>
-            <ListItemButton onClick={handleClick}>
-                <ListItemText
-                    className='flex justify-between'
-                    primary={
-                        <div>
-                            <h3>Title</h3>
-                            <p>From: Name</p>
-                        </div>
-                    }
-                />
-
-                {open ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
-            <Collapse in={open} timeout='auto' unmountOnExit>
-                <List component='div' disablePadding>
-                    <ListItemText sx={{ pl: 4 }}>
-                        Body of the message
-                    </ListItemText>
-                </List>
-            </Collapse>
-        </List>
+                    ))}
+            </List>
+        </>
     );
-};
+});
 
 export default TabView;

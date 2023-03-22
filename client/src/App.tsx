@@ -29,8 +29,8 @@ function App() {
                     element={
                         <ProtectedRoute authKey={isAuth}>
                             <MainView
-                            // setIsAuth={setIsAuth}
-                            // currentUser={currentUser}
+                                setIsAuth={setIsAuth}
+                                currentUser={currentUser}
                             />
                         </ProtectedRoute>
                     }
@@ -38,7 +38,6 @@ function App() {
             </Routes>
         </BrowserRouter>
     );
-    return <MainView />;
 }
 
 export default App;

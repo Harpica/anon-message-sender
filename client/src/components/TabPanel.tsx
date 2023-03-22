@@ -20,7 +20,7 @@ const TabPanel: React.FC<TabPanelProps> = ({
             aria-labelledby={`full-width-tab-${index}`}
             {...other}
             className={
-                'h-[calc(100%-48px)] box-border overflow-auto bg-slate-50 shadow p-5'
+                'h-[calc(100%-48px)] box-border overflow-auto scrollbar bg-slate-50 shadow p-5'
             }
         >
             {children}
