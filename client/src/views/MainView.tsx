@@ -40,7 +40,7 @@ const MainView: React.FC<MainViewProps> = observer(
                         </h1>
                     </header>
                     <main className={'h-full box-border text-slate-900'}>
-                        <nav className='bg-gradient-to-r from-sky-500 to-indigo-500 shadow text-white flex flex-col-reverse sm:flex-row items-center justify-between  mr-[-50%] pr-[50%] ml-[-50%] pl-[50%]'>
+                        <nav className='bg-gradient-to-r from-sky-500 to-indigo-500 shadow text-white flex flex-col-reverse sm:flex-row items-center justify-between  mr-[-50vw] pr-[50vw] ml-[-50vw] pl-[50vw]'>
                             <Tabs
                                 value={vm.tabsValue}
                                 onChange={(e, newValue) => {
