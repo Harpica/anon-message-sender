@@ -7,6 +7,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { observer } from 'mobx-react-lite';
 import { Message } from '../utils/types';
+import Typography from '@mui/material/Typography/Typography';
 
 interface TabViewProps {
     type: 'inbox' | 'outbox';
@@ -71,9 +72,11 @@ const TabView: React.FC<TabViewProps> = observer(({ type, messages }) => {
                                 unmountOnExit
                             >
                                 <List component='div' disablePadding>
-                                    <ListItemText sx={{ pl: 4 }}>
+                                    <Typography
+                                        sx={{ pl: 4, whiteSpace: 'pre-line' }}
+                                    >
                                         {message.body}
-                                    </ListItemText>
+                                    </Typography>
                                 </List>
                             </Collapse>
                         </div>
