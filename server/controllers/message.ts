@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import prisma from '../bd/prisma';
+import { MessageData } from '../services/message';
 
 export const getSentMessages = (
     req: Request,
@@ -37,30 +38,37 @@ export const getReceivedMessages = (
         .catch((err) => console.log(err));
 };
 
-export const createMessage = (
-    title: string,
-    sender: number,
-    recipient: number,
-    recipientName: string
-) => {
+export const createMessage = ({
+    title,
+    body,
+    senderID,
+    senderName,
+    recipientID,
+    recipientName,
+}: MessageData) => {
+    const date = new Date(Date.now());
     return prisma.message.create({
         data: {
+            date: date,
             title: title,
+            body: body,
+            senderName: senderName,
             sender: {
                 connect: {
-                    id: sender,
+                    id: senderID,
                 },
             },
             recipient: {
                 connectOrCreate: {
                     where: {
-                        id: recipient,
+                        id: recipientID,
                     },
                     create: {
                         name: recipientName,
                     },
                 },
             },
+            recipientName: recipientName,
         },
     });
 };

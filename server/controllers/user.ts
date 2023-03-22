@@ -4,9 +4,22 @@ import prisma from '../bd/prisma';
 export const createUser = (req: Request, res: Response, next: NextFunction) => {
     const userData = req.body.data;
     prisma.user
-        .create({ data: userData })
+        .findFirst({
+            where: {
+                name: userData.name,
+            },
+        })
         .then((user) => {
-            res.send({ user: user });
+            if (user) {
+                res.send({ user: user });
+                return;
+            }
+            prisma.user
+                .create({ data: userData })
+                .then((user) => {
+                    res.send({ user: user });
+                })
+                .catch((err) => console.log(err));
         })
         .catch((err) => console.log(err));
 };
